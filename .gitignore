@@ -1,3 +1,10 @@
 # vim
 *.swo
 *.swp
+
+# c
+*.o
+
+# lua
+v2.1/bin
+v2.1/lib

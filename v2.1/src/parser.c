@@ -9,7 +9,9 @@
 	extern int yyparse();
 #endif
 
+/* BEGIN PATCH
 #include <malloc.h>
+   END PATCH */
 
 # line 2 "lua.stx"
 
@@ -136,7 +138,7 @@ static void flush_list (int m, int n)
 {
   if (n == 0) return;
   if (m == 0)
-    code_byte(STORELIST0); 
+    code_byte(STORELIST0);
   else
   if (m < 255)
   {
@@ -165,7 +167,7 @@ static void incr_nvarbuffer (void)
 }
 
 static void code_number (float f)
-{ 
+{
   Word i = (Word)f;
   if (f == (float)i)  /* f has an (short) integer value */
   {
@@ -205,7 +207,7 @@ static int lua_localname (Word n)
 ** Otherwise, if zero, push indexed variable (record).
 */
 static void lua_pushvar (Long number)
-{ 
+{
  if (number > 0)	/* global var */
  {
   code_byte(PUSHGLOBAL);
@@ -245,11 +247,11 @@ static void init_function (TreeNode *func)
   funcCode = newvector(CODE_BLOCK, Byte);
   maxcode = CODE_BLOCK;
  }
- pc=0; basepc=funcCode; maxcurr=maxcode; 
+ pc=0; basepc=funcCode; maxcurr=maxcode;
  nlocalvar=0;
   if (lua_debug)
   {
-    code_byte(SETFUNCTION); 
+    code_byte(SETFUNCTION);
     code_code((Byte *)luaI_strdup(lua_file[lua_nfile-1]));
     code_word(luaI_findconstant(func));
   }
@@ -257,7 +259,7 @@ static void init_function (TreeNode *func)
 
 static void codereturn (void)
 {
-  if (lua_debug) code_byte(RESET); 
+  if (lua_debug) code_byte(RESET);
   if (nlocalvar == 0)
     code_byte(RETCODE0);
   else
@@ -278,7 +280,7 @@ static void codedebugline (void)
 
 static void adjust_mult_assign (int vars, int exps, int temps)
 {
-  if (exps < 0) 
+  if (exps < 0)
   {
     int r = vars - (-exps-1);
     if (r >= 0)
@@ -361,7 +363,7 @@ void lua_parse (Byte **code)
 {
  initcode = code;
  *initcode = newvector(CODE_BLOCK, Byte);
- maincode = 0; 
+ maincode = 0;
  maxmain = CODE_BLOCK;
  if (yyparse ()) lua_error("parse error");
  (*initcode)[maincode++] = RETCODE0;
@@ -374,7 +376,7 @@ void lua_parse (Byte **code)
 
 
 # line 365 "lua.stx"
-typedef union  
+typedef union
 {
  int   vInt;
  float vFloat;
@@ -548,7 +550,7 @@ static void PrintCode (Byte *code, Byte *end)
     			printf ("%d    ADJUST   %d\n", p-code, *(++p));
     			p++;
    			break;
-   case CREATEARRAY:	
+   case CREATEARRAY:
     {
       CodeWord c;
       int n = p-code;
@@ -568,7 +570,7 @@ static void PrintCode (Byte *code, Byte *end)
    case CONCOP:       	printf ("%d    CONCOP\n", (p++)-code); break;
    case MINUSOP:       	printf ("%d    MINUSOP\n", (p++)-code); break;
    case NOTOP:       	printf ("%d    NOTOP\n", (p++)-code); break;
-   case ONTJMP:	   
+   case ONTJMP:
     			{
 			 CodeWord c;
 			 int n = p-code;
@@ -577,7 +579,7 @@ static void PrintCode (Byte *code, Byte *end)
     			 printf ("%d    ONTJMP  %d\n", n, c.w);
 			}
    			break;
-   case ONFJMP:	   
+   case ONFJMP:
     			{
 			 CodeWord c;
 			 int n = p-code;
@@ -586,7 +588,7 @@ static void PrintCode (Byte *code, Byte *end)
     			 printf ("%d    ONFJMP  %d\n", n, c.w);
 			}
    			break;
-   case JMP:	   
+   case JMP:
     			{
 			 CodeWord c;
 			 int n = p-code;
@@ -1083,7 +1085,7 @@ static int yystate;			/* current state */
 static int yytmp;			/* extra var (lasts between blocks) */
 
 #if defined(__cplusplus) || defined(__STDC__) || defined(lint)
-static int __yaccpar_lint_hack__ = 0;   
+static int __yaccpar_lint_hack__ = 0;
 				/* if you change the value from 0 to
 				something else, make sure you know
 				what to do with yyerrlab reference.
@@ -1197,7 +1199,7 @@ $vars */
                         /*
                         ** reallocate and recover.  Note that pointers
                         ** have to be reset, or bad things will happen
-                        */ 
+                        */
                         int yyps_index = (yy_ps - yys);
                         int yypv_index = (yy_pv - yyv);
                         int yypvt_index = (yypvt - yyv);
@@ -1506,7 +1508,7 @@ $vars */
 	*/
 	switch( yytmp )
 	{
-		
+
 case 2:
 # line 411 "lua.stx"
 {
@@ -1525,7 +1527,7 @@ case 7:
 	       } break;
 case 8:
 # line 429 "lua.stx"
-{ 
+{
 		Word func = luaI_findsymbol(yypvt[-2].pNode);
 	        s_tag(func) = LUA_T_FUNCTION;
 	        s_bvalue(func) = yypvt[-0].pByte;
@@ -1637,7 +1639,7 @@ case 35:
           } break;
 case 36:
 # line 539 "lua.stx"
-{ 
+{
 	  yyval.vLong = pc;
 	  code_byte(0);		/* open space */
 	  code_word (0);
@@ -1717,7 +1719,7 @@ case 59:
 {code_byte(POP); } break;
 case 60:
 # line 575 "lua.stx"
-{ 
+{
       basepc[yypvt[-2].vLong] = ONFJMP;
       code_word_at(basepc+yypvt[-2].vLong+1, pc - (yypvt[-2].vLong + sizeof(Word)+1));
       yyval.vInt = 1;
@@ -1727,7 +1729,7 @@ case 61:
 {code_byte(POP); } break;
 case 62:
 # line 581 "lua.stx"
-{ 
+{
       basepc[yypvt[-2].vLong] = ONTJMP;
       code_word_at(basepc+yypvt[-2].vLong+1, pc - (yypvt[-2].vLong + sizeof(Word)+1));
       yyval.vInt = 1;
@@ -1751,8 +1753,8 @@ case 66:
 { yyval.vInt = 0; } break;
 case 67:
 # line 605 "lua.stx"
-{ 
-               code_byte(PUSHSELF); 
+{
+               code_byte(PUSHSELF);
 	       code_word(luaI_findconstant(yypvt[-0].pNode));
                yyval.vInt = 1;
 	     } break;
@@ -1789,13 +1791,13 @@ case 76:
 case 77:
 # line 634 "lua.stx"
 {
-		 localvar[nlocalvar]=luaI_findsymbol(yypvt[-0].pNode); 
+		 localvar[nlocalvar]=luaI_findsymbol(yypvt[-0].pNode);
 		 add_nlocalvar(1);
 		} break;
 case 78:
 # line 639 "lua.stx"
 {
-		 localvar[nlocalvar]=luaI_findsymbol(yypvt[-0].pNode); 
+		 localvar[nlocalvar]=luaI_findsymbol(yypvt[-0].pNode);
 		 add_nlocalvar(1);
 		} break;
 case 79:
@@ -1824,7 +1826,7 @@ case 87:
 		} break;
 case 88:
 # line 669 "lua.stx"
-{ 
+{
 	       push_field(luaI_findconstant(yypvt[-2].pNode));
 	      } break;
 case 89:
@@ -1834,19 +1836,19 @@ case 90:
 # line 676 "lua.stx"
 {
 		  yyval.vInt=yypvt[-2].vInt+1;
-		  if (yyval.vInt%FIELDS_PER_FLUSH == 0) 
+		  if (yyval.vInt%FIELDS_PER_FLUSH == 0)
 		    flush_list(yyval.vInt/FIELDS_PER_FLUSH - 1, FIELDS_PER_FLUSH);
 		} break;
 case 91:
 # line 684 "lua.stx"
 {
-	   nvarbuffer = 0; 
+	   nvarbuffer = 0;
            varbuffer[nvarbuffer] = yypvt[-0].vLong; incr_nvarbuffer();
 	   yyval.vInt = (yypvt[-0].vLong == 0) ? 1 : 0;
 	  } break;
 case 92:
 # line 690 "lua.stx"
-{ 
+{
            varbuffer[nvarbuffer] = yypvt[-0].vLong; incr_nvarbuffer();
 	   yyval.vInt = (yypvt[-0].vLong == 0) ? yypvt[-2].vInt + 1 : yypvt[-2].vInt;
 	  } break;
@@ -1884,7 +1886,7 @@ case 98:
 case 99:
 # line 725 "lua.stx"
 {
-	     localvar[nlocalvar+yypvt[-2].vInt]=luaI_findsymbol(yypvt[-0].pNode); 
+	     localvar[nlocalvar+yypvt[-2].vInt]=luaI_findsymbol(yypvt[-0].pNode);
 	     yyval.vInt = yypvt[-2].vInt+1;
 	    } break;
 case 100:

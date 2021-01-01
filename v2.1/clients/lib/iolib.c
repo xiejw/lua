@@ -16,7 +16,22 @@ char *rcs_iolib="$Id: iolib.c,v 1.21 1995/02/06 19:36:13 roberto Exp $";
 #include "lua.h"
 #include "lualib.h"
 
-static FILE *in=stdin, *out=stdout;
+/* BEGIN PATCH
+ static FILE *in=stdin, *out=stdout; */
+static FILE *in_impl=NULL, *out_impl=NULL;
+static FILE** _get_in() {
+  if (in_impl!=NULL) return &in_impl;
+  in_impl = stdin;
+  return &in_impl;
+}
+static FILE** _get_out() {
+  if (out_impl!=NULL) return &out_impl;
+  out_impl = stdin;
+  return &out_impl;
+}
+#define in (*_get_in())
+#define out (*_get_out())
+/* END PATCH */
 
 /*
 ** Open a file to read.
@@ -238,7 +253,7 @@ static void io_read (void)
   t = *e++;
   while (isdigit(*e))
    m = m*10 + (*e++ - '0');
-  
+
   if (m > 0)
   {
    char f[80];
@@ -270,8 +285,8 @@ static void io_read (void)
      lua_pushnumber(fl);
     }
     break;
-    default: 
-     lua_pushstring(s); 
+    default:
+     lua_pushstring(s);
     break;
    }
   }
@@ -295,7 +310,7 @@ static void io_read (void)
        else lua_pushnumber(f);
     }
     break;
-    default: 
+    default:
     {
      char s[256];
      if (fscanf (in, "%s", s) == EOF)
@@ -319,10 +334,10 @@ static void io_readuntil (void)
  char *s;
  lua_Object lo = lua_getparam(1);
  if (!lua_isstring(lo))
-  d = EOF; 
+  d = EOF;
  else
   d = *lua_getstring(lo);
- 
+
  s = (char *)malloc(n+1);
  while((c = fgetc(in)) != EOF && c != d)
  {
@@ -396,7 +411,7 @@ static char *buildformat (char *e, lua_Object o)
    sprintf(strchr(f,0), "%c", t);
    sprintf (string, f, (long int)lua_getnumber(o));
   break;
-  case 'f': case 'g': case 'e': case 'G': case 'E': 
+  case 'f': case 'g': case 'e': case 'G': case 'E':
    sprintf(strchr(f,0), "%c", t);
    sprintf (string, f, (float)lua_getnumber(o));
   break;
@@ -433,7 +448,7 @@ static char *buildformat (char *e, lua_Object o)
  {
   string--;
   fspace--;
-  *string = *fspace; 
+  *string = *fspace;
  }
  while (isspace(*e)) *send++ = *e++;
  *send = 0;
@@ -460,8 +475,8 @@ static void io_write (void)
  else					/* formated */
  {
   if (!lua_isstring(o2))
-  { 
-   lua_error ("incorrect format to function `write'"); 
+  {
+   lua_error ("incorrect format to function `write'");
    lua_pushnumber(0);
    return;
   }
@@ -524,7 +539,7 @@ static void io_getenv (void)
  {
   char *env = getenv(lua_getstring(s));
   if (env == NULL) lua_pushnil();
-  else             lua_pushstring(env); 
+  else             lua_pushstring(env);
  }
 }
 
@@ -535,14 +550,14 @@ static void io_time (void)
 {
  time_t t;
  struct tm *s;
- 
+
  time(&t);
  s = localtime(&t);
  lua_pushnumber(s->tm_hour);
  lua_pushnumber(s->tm_min);
  lua_pushnumber(s->tm_sec);
 }
- 
+
 /*
 ** Return date: dd, mm, yyyy
 */
@@ -550,14 +565,14 @@ static void io_date (void)
 {
  time_t t;
  struct tm *s;
- 
+
  time(&t);
  s = localtime(&t);
  lua_pushnumber(s->tm_mday);
  lua_pushnumber(s->tm_mon+1);
  lua_pushnumber(s->tm_year+1900);
 }
- 
+
 /*
 ** Beep
 */
@@ -565,7 +580,7 @@ static void io_beep (void)
 {
  printf("\a");
 }
- 
+
 /*
 ** To exit
 */
