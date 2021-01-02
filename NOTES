@@ -1,4 +1,32 @@
+# vim: filetype=text
+
 v2.1 notes
+
+gabage collection
+  lua (v2.1) is based on mark and sweep.
+
+  free objects only have two kinds
+    string and hash (aka associated array)
+    for other types, they are part of the objects and value sematics
+
+  trigger
+    during creating of string and hash, lua_pack is called.
+
+  design
+    global symbol table is part of the root. all items in it (including their
+        chilren) should be marked as live.
+
+        global symbol table stores value as key (called key) and value (called
+        ref)
+
+    stack, same as global symbol table.
+        all values are stored. not ptr.
+
+    start from root set (global symbol and stack). mark all objects.
+    sweep -> remove unused.
+
+
+src code
 
   include
     lua.h       all public apis, lua_type
