@@ -7,7 +7,6 @@ LIB= $(LUA)/lib
 INCS= -I/usr/5include -I$(INC)
 WARN= -Wall -Wmissing-prototypes -Wshadow -ansi
 
-CC= gcc
 CFLAGS= $(INCS) $(DEFS) $(WARN) -O2
 
 OBJS= fallback.o hash.o inout.o lex.o mem.o opcode.o parser.o table.o tree.o

@@ -1,5 +1,9 @@
 v2.1
 
+  Makefile
+    remove CC=gcc so clang can be used
+    create bin lib before call domake (see Makefile)
+
   client/lua/iolib.c
     stdin/stdout are not compile time constant.
     changed to macro backed by an lvalue.

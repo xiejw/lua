@@ -4,7 +4,6 @@ BIN= $(LUA)/bin
 INC= $(LUA)/include
 LIB= $(LUA)/lib
 
-CC= gcc
 CFLAGS= $(INCS) $(DEFS) $(WARN) -O2
 
 # in SunOs /usr/5include contains prototypes for standard lib
