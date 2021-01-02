@@ -2,12 +2,12 @@
 ** fallback.c
 ** TecCGraf - PUC-Rio
 */
- 
+
 char *rcs_fallback="$Id: fallback.c,v 1.11 1995/02/06 19:34:03 roberto Exp $";
 
 #include <stdio.h>
 #include <string.h>
- 
+
 #include "mem.h"
 #include "fallback.h"
 #include "opcode.h"
@@ -29,15 +29,15 @@ static void funcFB (void);
 ** Warning: This list must be in the same order as the #define's
 */
 struct FB  luaI_fallBacks[] = {
-{"error", {LUA_T_CFUNCTION, errorFB}},
-{"index", {LUA_T_CFUNCTION, indexFB}},
-{"gettable", {LUA_T_CFUNCTION, gettableFB}},
-{"arith", {LUA_T_CFUNCTION, arithFB}},
-{"order", {LUA_T_CFUNCTION, orderFB}},
-{"concat", {LUA_T_CFUNCTION, concatFB}},
-{"settable", {LUA_T_CFUNCTION, gettableFB}},
-{"gc", {LUA_T_CFUNCTION, GDFB}},
-{"function", {LUA_T_CFUNCTION, funcFB}}
+{"error", {LUA_T_CFUNCTION, {errorFB}}},
+{"index", {LUA_T_CFUNCTION, {indexFB}}},
+{"gettable", {LUA_T_CFUNCTION, {gettableFB}}},
+{"arith", {LUA_T_CFUNCTION, {arithFB}}},
+{"order", {LUA_T_CFUNCTION, {orderFB}}},
+{"concat", {LUA_T_CFUNCTION, {concatFB}}},
+{"settable", {LUA_T_CFUNCTION, {gettableFB}}},
+{"gc", {LUA_T_CFUNCTION, {GDFB}}},
+{"function", {LUA_T_CFUNCTION, {funcFB}}}
 };
 
 #define N_FB  (sizeof(luaI_fallBacks)/sizeof(struct FB))
@@ -74,19 +74,19 @@ static void errorFB (void)
   else
     fprintf(stderr, "lua: unknown error\n");
 }
- 
+
 
 static void indexFB (void)
 {
   lua_pushnil();
 }
- 
+
 
 static void gettableFB (void)
 {
   lua_reportbug("indexed expression not a table");
 }
- 
+
 
 static void arithFB (void)
 {

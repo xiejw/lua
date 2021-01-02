@@ -33,10 +33,10 @@ static Object *top = NULL;
 
 
 /* macros to convert from lua_Object to (Object *) and back */
- 
+
 #define Address(lo)     ((lo)+stack-1)
 #define Ref(st)         ((st)-stack+1)
- 
+
 
 static StkId CBase = 0;  /* when Lua calls C or C calls Lua, points to */
                           /* the first slot after the last parameter. */
@@ -272,7 +272,7 @@ static void pushsubscript (void)
 {
   if (tag(top-2) != LUA_T_ARRAY)
     do_call(&luaI_fallBacks[FB_GETTABLE].function, (top-stack)-2, 1, (top-stack)-2);
-  else 
+  else
   {
     Object *h = lua_hashget(avalue(top-2), top-1);
     if (h == NULL || tag(h) == LUA_T_NIL)
@@ -430,7 +430,7 @@ int lua_dostring (char *string)
 */
 lua_Object lua_setfallback (char *name, lua_CFunction fallback)
 {
-  static Object func = {LUA_T_CFUNCTION, luaI_setfallback};
+  static Object func = {LUA_T_CFUNCTION, {luaI_setfallback}};
   adjustC(0);
   lua_pushstring(name);
   lua_pushcfunction(fallback);
@@ -439,7 +439,7 @@ lua_Object lua_setfallback (char *name, lua_CFunction fallback)
 }
 
 
-/* 
+/*
 ** API: receives on the stack the table and the index.
 ** returns the value.
 */
@@ -480,7 +480,7 @@ void lua_endblock (void)
   }
 }
 
-/* 
+/*
 ** API: receives on the stack the table, the index, and the new value.
 */
 void lua_storesubscript (void)
@@ -702,7 +702,7 @@ static void call_arith (char *op)
   do_call(&luaI_fallBacks[FB_ARITH].function, (top-stack)-3, 1, (top-stack)-3);
 }
 
-static void comparison (lua_Type tag_less, lua_Type tag_equal, 
+static void comparison (lua_Type tag_less, lua_Type tag_equal,
                         lua_Type tag_great, char *op)
 {
   Object *l = top-2;
@@ -1025,7 +1025,7 @@ static StkId lua_execute (Byte *pc, StkId base)
    }
    break;
 
-   case ONFJMP:	
+   case ONFJMP:
    {
     CodeWord code;
     get_word(code,pc);
