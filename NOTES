@@ -21,9 +21,59 @@ v2.1 notes
           get_code
 
     opcode.c
-        TODO
+
+        LIST
+          PUSHNIL   push a nil to top
+
 
         stack is an C array of Object
+
+        callC
+
+          CBase
+            when calls C or C calls Lua, points to the first slot after the
+            last parameter.
+          CnResults
+            when Lua calls C (CFunction), has the number of parameters
+            when C calls Lua, has the number of results.
+
+        doCall
+          callC CFunction
+          lua_execute lua function
+
+          for MULT_RET adjust the top to fill NIL
+          if provides a different `whereRes`, move results.
+            ?? to pop up the paramsters or other frames?
+
+        ?? pushsubscript
+        ?? storesubscript
+
+        do_proectedrun
+            call a funciton with a fallback protection.
+
+        lua_call(fn_name)
+            lookup in symbol table
+        lua_dofile(filename)
+            read the file and call main.
+
+        block
+          stores the CBase (likes of fn call stack frame?)
+
+          ?? but big object is address based. how to free them?
+
+        ?? locked
+          lua_getlocked
+          lua_pushedLocalked
+          lua_lock
+
+        ?? where is the symbol
+        ?? what does incooperate ojbect into stack mean.
+
+        lua_getglobal
+        lua_storeglobal
+          both ref sematics
+
+        lua_execute
 
   clients
       lua/strlib.c
@@ -48,3 +98,5 @@ v2.1 notes
       lua/lua.a
         main file
           register all methods and read input file.
+
+
