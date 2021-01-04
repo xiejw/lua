@@ -25,6 +25,55 @@ gabage collection
     start from root set (global symbol and stack). mark all objects.
     sweep -> remove unused.
 
+object design
+
+  strings are stored in constant.
+
+  all nubmers, including floats, are stored as part of the code. pushbyte, bush
+  word, push_float, etc.
+
+  push/store global basically structure copies between stack slot and global
+  symbols.
+
+  push/store local does similiar things but the source loc is calculated based
+  on stack + base + no_of_local_var.
+
+table design
+  list or record
+    batch flush
+  PUSHRECORD
+  PUSHLIST
+
+multiple assignment
+  adjust_mult_assign
+  count the var list and expr list and adjust it.
+  ?? how to handle function call which return multipl values?
+
+  a,b =1,2
+  print(a)
+  1
+  print(b)
+  2
+  function foo(x,y) return x,y end
+  x = foo(a,b)
+  print(x)
+  1
+  c, d = foo(a,b)
+  print(c)
+  1
+  print(d)
+  2
+  c, d = 3, foo(a,b)
+  print(c)
+  3
+  print(d)
+  1
+
+
+function call
+  nParams
+  nResults
+
 
 src code
 
