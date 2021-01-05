@@ -45,6 +45,9 @@ table design
   PUSHLIST
 
 multiple assignment
+
+  TL;DR; to know how mnay values, expr1 will  will code how many values needed.
+
   adjust_mult_assign
   count the var list and expr list and adjust it.
   ?? how to handle function call which return multipl values?
